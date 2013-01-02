@@ -48,6 +48,6 @@ SRCS =\
 
 CFLAGS += -I../include -I../lib -I../libdaemon/client
 
-LDADD += ../lib/liblvm-internal.a ../libdm/libdm.a -ludev
+LDADD += ../lib/liblvm-internal.a ../libdm/libdm.a
 
 .include <bsd.prog.mk>
