@@ -1,3 +1,3 @@
-SUBDIR = lib libdm liblvm tools
+SUBDIR = lib libdm liblvm libdaemon tools
 
 .include <bsd.subdir.mk>
