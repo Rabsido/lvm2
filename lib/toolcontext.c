@@ -37,6 +37,7 @@
 #include "lvmetad.h"
 #include "dev-cache.h"
 #include "archiver.h"
+#include "libdevmapper.h"
 
 #ifdef HAVE_LIBDL
 #include "sharedlib.h"
@@ -1387,40 +1388,7 @@ struct cmd_context *create_toolcontext(unsigned is_long_lived,
 	/* FIXME Make this configurable? */
 	reset_lvm_errno(1);
 
-#ifndef VALGRIND_POOL
-	/* Set in/out stream buffering before glibc */
-	if (set_buffering) {
-		/* Allocate 2 buffers */
-		if (!(cmd->linebuffer = dm_malloc(2 * linebuffer_size))) {
-			log_error("Failed to allocate line buffer.");
-			goto out;
-		}
-
-		if (is_valid_fd(STDIN_FILENO)) {
-			if (!_reopen_stream(stdin, STDIN_FILENO, "r", "stdin", &new_stream))
-				goto_out;
-			stdin = new_stream;
-			if (setvbuf(stdin, cmd->linebuffer, _IOLBF, linebuffer_size)) {
-				log_sys_error("setvbuf", "");
-				goto out;
-			}
-		}
-
-		if (is_valid_fd(STDOUT_FILENO)) {
-			if (!_reopen_stream(stdout, STDOUT_FILENO, "w", "stdout", &new_stream))
-				goto_out;
-			stdout = new_stream;
-			if (setvbuf(stdout, cmd->linebuffer + linebuffer_size,
-				     _IOLBF, linebuffer_size)) {
-				log_sys_error("setvbuf", "");
-				goto out;
-			}
-		}
-		/* Buffers are used for lines without '\n' */
-	} else
-		/* Without buffering, must not use stdin/stdout */
-		init_silent(1);
-#endif
+	init_silent(1);
 
 	/*
 	 * Environment variable LVM_SYSTEM_DIR overrides this below.
@@ -1688,29 +1656,6 @@ void destroy_toolcontext(struct cmd_context *cmd)
 		dm_config_destroy(cft_cmdline);
 	if (cmd->libmem)
 		dm_pool_destroy(cmd->libmem);
-
-#ifndef VALGRIND_POOL
-	if (cmd->linebuffer) {
-		/* Reset stream buffering to defaults */
-		if (is_valid_fd(STDIN_FILENO)) {
-			if (_reopen_stream(stdin, STDIN_FILENO, "r", "stdin", &new_stream)) {
-				stdin = new_stream;
-				setlinebuf(stdin);
-			} else
-				cmd->linebuffer = NULL;	/* Leave buffer in place (deliberate leak) */
-		}
-
-		if (is_valid_fd(STDOUT_FILENO)) {
-			if (_reopen_stream(stdout, STDOUT_FILENO, "w", "stdout", &new_stream)) {
-				stdout = new_stream;
-				setlinebuf(stdout);
-			} else
-				cmd->linebuffer = NULL;	/* Leave buffer in place (deliberate leak) */
-		}
-
-		dm_free(cmd->linebuffer);
-	}
-#endif
 
 	dm_free(cmd);
 
