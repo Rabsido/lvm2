@@ -17,6 +17,7 @@
 #include "memcheck.h"
 #endif
 
+#include <stddef.h>
 #include "dmlib.h"
 #include <malloc.h>
 
