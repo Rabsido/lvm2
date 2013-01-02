@@ -16,7 +16,6 @@
 #include "lib.h"
 #include "locking_types.h"
 #include "defaults.h"
-#include "sharedlib.h"
 #include "toolcontext.h"
 #include "activate.h"
 #include "locking.h"

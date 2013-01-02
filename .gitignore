@@ -3,6 +3,7 @@
 *.a
 *.d
 *.o
+*.po
 *.pc
 *.pot
 *.so
@@ -13,12 +14,9 @@
 .export.sym
 .exported_symbols_generated
 .gdb_history
+.depend
 
-Makefile
 make.tmpl
-
-configure.h
-version.h
 
 /autom4te.cache/
 /config.log

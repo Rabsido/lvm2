@@ -17,7 +17,7 @@
 #include <sys/mman.h>
 
 /* FIXME: thread unsafe */
-static DM_LIST_INIT(_dm_pools);
+DM_LIST_INIT(_dm_pools);
 void dm_pools_check_leaks(void);
 
 #ifdef DEBUG_ENFORCE_POOL_LOCKING

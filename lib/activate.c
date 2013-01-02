@@ -28,7 +28,6 @@
 #include "config.h"
 #include "filter.h"
 #include "segtype.h"
-#include "sharedlib.h"
 
 #include <limits.h>
 #include <fcntl.h>

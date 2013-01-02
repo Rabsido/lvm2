@@ -20,6 +20,8 @@
 #include "dmlib.h"
 #include <malloc.h>
 
+extern struct dm_list _dm_pools;
+
 struct chunk {
 	char *begin, *end;
 	struct chunk *prev;

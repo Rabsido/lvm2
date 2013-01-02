@@ -16,6 +16,8 @@
 #include "dmlib.h"
 #include <assert.h>
 
+extern struct dm_list _dm_pools;
+
 struct block {
 	struct block *next;
 	size_t size;
