@@ -1,4 +1,5 @@
 PROG = lvm
+MAN  =
 SRCS =\
 	dumpconfig.c \
 	formats.c \
@@ -48,6 +49,6 @@ SRCS =\
 
 CFLAGS += -I../include -I../lib -I../libdaemon/client
 
-LDADD += ../lib/liblvm-internal.a ../libdm/libdm.a
+LDADD += ../lib/liblvm-internal.a ../libdm/libdm.a ../libdaemon/client/libdaemonclient.a
 
 .include <bsd.prog.mk>
